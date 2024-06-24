@@ -3,6 +3,9 @@ package br.com.unimed.Caso1.api;
 import br.com.unimed.Caso1.domain.Carro;
 import br.com.unimed.Caso1.domain.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +19,19 @@ public class CarrosController {
     private CarroService service;
 
     @GetMapping
-    public Iterable<Carro> get() {
-        return service.getCarros();
+    public ResponseEntity<Iterable<Carro>> get() {
+        return ResponseEntity.ok(service.getCarros());
     }
 
     @GetMapping("/{id}")
-    public Optional<Carro> get(@PathVariable("id") Long id) {
-        return service.getCarroById(id);
+    public ResponseEntity get(@PathVariable("id") Long id) {
+        Optional<Carro> carro = service.getCarroById(id);
+
+        if (carro.isPresent()) {
+            return ResponseEntity.ok(carro.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/tipo/{tipo}")
