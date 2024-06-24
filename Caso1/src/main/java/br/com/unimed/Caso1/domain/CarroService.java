@@ -23,7 +23,7 @@ public class CarroService {
         return  rep.findById(id);
     }
 
-    public Iterable<Carro> getCarroByTipo(String tipo) {
+    public List<Carro> getCarroByTipo(String tipo) {
         return rep.findByTipo(tipo);
     }
 
@@ -60,6 +60,7 @@ public class CarroService {
         }
     }
 
+    //teste lista na memoria
     public List<Carro> getCarrosFake() {
         List<Carro> carros = new ArrayList<>();
         carros.add(new Carro(1L, "Fuscão Preto", "Velho"));
