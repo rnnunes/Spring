@@ -1,6 +1,7 @@
 package br.com.unimed.Caso1.api.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,10 @@ import javax.sql.DataSource;
 public class SecurityConfig {
 
     @Autowired
+    @Qualifier("UserDetailsService")
+    private UserDetailsService userDetailsService;
+
+    @Autowired
     private DataSource dataSource;
 
     @Bean
@@ -37,32 +42,31 @@ public class SecurityConfig {
         return http.build();
     }
 
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        BCryptPasswordEncoder encoder = passwordEncoder();
-        UserDetails user = User.withUsername("user")
-                .password(encoder.encode("user"))
-                .roles("USER")
-                .build();
-        UserDetails admin = User.withUsername("admin")
-                .password(encoder.encode("admin"))
-                .roles("ADMIN", "USER")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder encoder, UserDetailsService userDetailsService) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(encoder)
-                .and()
-                .build();
-    }
+//    @Bean
+//    public BCryptPasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//
+//        UserDetails user = User.withUsername("user")
+//                .password(encoder.encode("user"))
+//                .roles("USER")
+//                .build();
+//        UserDetails admin = User.withUsername("admin")
+//                .password(encoder.encode("admin"))
+//                .roles("ADMIN", "USER")
+//                .build();
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
+//
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder encoder, UserDetailsService userDetailsService) throws Exception {
+//        return http.getSharedObject(AuthenticationManagerBuilder.class)
+//                .userDetailsService(userDetailsService)
+//                .passwordEncoder(encoder)
+//                .and()
+//                .build();
+//    }
 }
