@@ -1,11 +1,9 @@
 package br.com.unimed.Caso1.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -18,9 +16,15 @@ public class User {
     private String senha;
     private String email;
 
-    public static void main(String[] args) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        System.out.println(encoder.encode("123"));
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
+
+//    public static void main(String[] args) {
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        System.out.println(encoder.encode("123"));
+//    }
 
 }
